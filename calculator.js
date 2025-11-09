@@ -14,7 +14,7 @@ buttons.forEach(button => {
     button.addEventListener('click', () => {
         const value = button.dataset.value;
 
-        // Clear button
+       
         if (button.classList.contains('clear')) {
             current = '';
             operator = '';
@@ -24,12 +24,12 @@ buttons.forEach(button => {
             return;
         }
 
-        // Equal button
+        
         if (button.classList.contains('equal')) {
             if (operator && prev !== '' && current !== '') {
                 try {
                     let calculation = eval(`${prev}${operator}${current}`);
-                    calculation = +parseFloat(calculation.toFixed(10)); // fix floating precision
+                    calculation = +parseFloat(calculation.toFixed(10)); 
                     updateDisplay(calculation);
                     prev = calculation.toString();
                     current = '';
@@ -42,30 +42,33 @@ buttons.forEach(button => {
             return;
         }
 
-        // Operator buttons (+, -, *, /)
+        
         if (button.classList.contains('operator')) {
             if (prev === '' && current !== '') {
                 prev = current;
                 operator = value;
                 current = '';
+                updateDisplay(`${prev} ${operator}`); 
             } else if (operator && current !== '' && prev !== '') {
                 let calculation = eval(`${prev}${operator}${current}`);
                 calculation = +parseFloat(calculation.toFixed(10));
-                updateDisplay(calculation);
                 prev = calculation.toString();
                 operator = value;
                 current = '';
+                updateDisplay(`${prev} ${operator}`); 
             } else if (resultDisplayed) {
                 operator = value;
                 current = '';
                 resultDisplayed = false;
+                updateDisplay(`${prev} ${operator}`); 
             } else if (!operator && prev !== '') {
                 operator = value;
+                updateDisplay(`${prev} ${operator}`); 
             }
             return;
         }
 
-        // Handle numbers and decimal point
+        
         if (resultDisplayed) {
             current = '';
             resultDisplayed = false;
@@ -79,6 +82,11 @@ buttons.forEach(button => {
             current += value;
         }
 
-        updateDisplay(current || '0');
+        
+        if (operator && prev !== '') {
+            updateDisplay(`${prev} ${operator} ${current}`);
+        } else {
+            updateDisplay(current || '0');
+        }
     });
 });
